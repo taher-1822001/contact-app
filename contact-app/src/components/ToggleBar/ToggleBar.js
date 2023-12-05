@@ -100,8 +100,10 @@ class ToggleBar extends React.Component {
                   </style>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => console.log('Edit Profile clicked')}>
+                    <Dropdown.Item >
+                      <Link to={`/user/edit/${Cookies.get('id')}`} style={{textDecoration:"none"}}>
                       <FontAwesomeIcon icon={faUserEdit} /> &nbsp; Edit Profile
+                      </Link>
                     </Dropdown.Item>
                     <Dropdown.Item onClick={this.LogoutConfirmation}>
                       <FontAwesomeIcon icon={faSignOutAlt} /> &nbsp; Logout

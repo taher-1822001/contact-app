@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
-
+import datetime
 class UsersListCreate(APIView):
     serializer_class = UserSerializer
     def get(self, request:Request, *args, **kwargs):
@@ -97,17 +97,58 @@ class UserRetrieveUpdateDestroy(APIView):
 
     def put(self, request:Request, user_id:uuid):
        
-        data = request.data
-        user = get_object_or_404(User, pk=user_id)
-        serializer = self.serializer_class(instance=user, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            response = {
-                "message":"User edit successfull",
-                "data":serializer.data
-            }
-            return Response(data=response, status=status.HTTP_200_OK)
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data.copy()
+        errorData = {}
+
+        try:
+            access_token = settings.DROP_BOX_KEY
+            uploaded_file = request.data.get('image')
+
+            if uploaded_file and isinstance(uploaded_file, str):
+                # If 'image' is a string (URL), assume it's already an image path, do nothing
+                pass
+
+            elif uploaded_file and hasattr(uploaded_file, 'file'):
+                email = data['created_by']
+                file_name = uploaded_file.name
+
+                # Read the file content
+                file_content = uploaded_file.read()
+
+                # Define Dropbox path for upload
+                path = f'/user/userProfiles/{email}/{file_name}'
+
+                # Upload file content to Dropbox
+                dbx = dropbox.Dropbox(access_token)
+                dbx.files_upload(file_content, path)
+
+                # Construct the shared link for the uploaded file
+                shared_link = dbx.sharing_create_shared_link(path).url
+
+                # Update the user data dictionary with the Dropbox file path
+                # Modify the shared link URL if needed (change dl=0 to dl=1)
+                shared_link = shared_link.replace('dl=0', 'dl=1')
+                
+                data['image'] = shared_link
+                data['updated_on'] = datetime.datetime.now()
+            user = get_object_or_404(User, pk=user_id)
+            serializer = self.serializer_class(data=data, instance=user)
+
+            if serializer.is_valid():
+                serializer.save()
+
+                response = {
+                    "message": "user updated and file uploaded to Dropbox",
+                    "data": serializer.data
+                }
+                return Response(data=response, status=status.HTTP_201_CREATED)
+
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
     def delete(self, request:Request, user_id:uuid):
         user = get_object_or_404(User, pk=user_id)
         user.delete()

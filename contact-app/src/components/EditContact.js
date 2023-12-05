@@ -91,7 +91,7 @@ console.log("created by: ", formData.created_by);
       setImage('');
     } catch (error) {
       console.error('Contact creation failure:', error);
-      toast.error('Contact creation failure');
+      toast.error('Contact update failure');
       // Handle error (e.g., show error message)
     } finally {
       // Set loading state to false

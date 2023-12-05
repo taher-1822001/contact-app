@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import BASE_URL from './config';
 // Assuming you have other necessary components imported as well
 
-const EditContact = () => {
+const EditUser = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -28,6 +28,7 @@ const EditContact = () => {
   const [created_by, setCreatedBy] = useState(Cookies.get('email'));
   const [setLoading, setSetLoading] = useState(false);
   const [route, setRoute] = useState(false);
+  const [show, setShow] = useState("password");
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -59,8 +60,8 @@ const EditContact = () => {
       setSetLoading(true);
       const formData1 = new FormData();
   
-      formData1.append('firstName', formData.firstName);
-      formData1.append('lastName', formData.lastName);
+      formData1.append('first_name', formData.firstName);
+      formData1.append('last_name', formData.lastName);
       formData1.append('email', formData.email);
       formData1.append('phone', formData.phone);
       formData1.append('password', formData.password);
@@ -75,7 +76,7 @@ const EditContact = () => {
   
       formData1.append('created_by', created_by);
   
-      let url = `${BASE_URL}/user/${params.id}`;
+      let url = `${BASE_URL}/users/${params.id}`;
       const response = await axios.put(url, formData1);
       
       console.log('Update successful:', response.data);
@@ -91,8 +92,8 @@ const EditContact = () => {
       });
       setImage('');
     } catch (error) {
-      console.error('Contact creation failure:', error);
-      toast.error('Contact creation failure');
+      console.error('user update failure:', error);
+      toast.error('user update failure');
       // Handle error (e.g., show error message)
     } finally {
       // Set loading state to false
@@ -128,7 +129,7 @@ const EditContact = () => {
     getCategories();
     console.log("use params", params)
     if (params.id) {
-      getContactData(params.id);
+      getUserData(params.id);
     }
  
   }, [params.id]); // Empty dependency array ensures it runs only once on mount
@@ -141,17 +142,18 @@ const EditContact = () => {
       URL.revokeObjectURL(image);
     };
   }, []);
-  const getContactData = (id) => {
-    let url = `${BASE_URL}/contacts/${id}`;
+  const getUserData = (id) => {
+    let url = `${BASE_URL}/users/${id}`;
     axios.get(url)
       .then(response => {
         let data = response.data.data;
         
         setFormData({
-          name: data.name,
+          firstName: data.first_name,
+          lastName: data.last_name,
           email: data.email,
           phone: data.phone,
-          category_id: data.category_id,
+          password: data.password,
           image: data.image // Create object URL for the blob data
         });
         setImage(data.image); // Set image state with the object URL
@@ -167,6 +169,15 @@ const EditContact = () => {
       category_id: e.target.value // Update category_id in the state
     });
   };
+ const passwordViewStateFunction = () =>{
+    if(show==="password")
+    {
+        setShow("text")
+    }
+    else{
+        setShow("password")
+    }
+}
   return (
     <>
     {console.log("image path", formData.image)}
@@ -181,7 +192,7 @@ const EditContact = () => {
       <ToggleBar />
 
       <div className="container align-items-center">
-        <h2 className="text-center">Edit Contact</h2>
+        <h2 className="text-center">Edit Profile</h2>
         <hr />
         <form onSubmit={ContactFormHandler}>
           <center>
@@ -192,11 +203,18 @@ const EditContact = () => {
             </div>
           </center>
 
-          {/* Name field */}
+          {/* firstName field */}
           <div className="form-group row justify-content-center">
             <div className="col-md-4">
-              <label htmlFor="Name">Name<span className="text-danger">*</span></label>
-              <input type="text" className="form-control" id="Name" aria-describedby="emailHelp" placeholder="Enter Name" value={formData.name} required name="name" onChange={handleChange} />
+              <label htmlFor="firstName">First Name<span className="text-danger">*</span></label>
+              <input type="text" className="form-control" id="firstName" aria-describedby="emailHelp" placeholder="Enter First Name" value={formData.firstName} required name="firstName" onChange={handleChange} />
+            </div>
+          </div>
+          {/* lastName field */}
+          <div className="form-group row justify-content-center">
+            <div className="col-md-4">
+              <label htmlFor="lastName">Last Name<span className="text-danger">*</span></label>
+              <input type="text" className="form-control" id="lastName" aria-describedby="emailHelp" placeholder="Enter Last Name" value={formData.lastName} required name="lastName" onChange={handleChange} />
             </div>
           </div>
 
@@ -205,7 +223,6 @@ const EditContact = () => {
             <div className="col-md-4">
               <label htmlFor="exampleInputEmail1">Email address</label>
               <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value={formData.email} name="email" onChange={handleChange} />
-              <small id="emailHelp" className="form-text text-muted">We'll never share your contact's email with anyone else.</small>
             </div>
           </div>
 
@@ -214,30 +231,20 @@ const EditContact = () => {
             <div className="col-md-4">
               <label htmlFor="InputPhone">Phone<span className="text-danger">*</span></label>
               <input type="number" className="form-control" id="InputPhone" aria-describedby="emailHelp" placeholder="Enter phone number" required value={formData.phone} name="phone" onChange={handleChange} />
-              <small id="emailHelp" className="form-text text-muted">We'll never share your contact's phone number with anyone else.</small>
             </div>
           </div>
 
-          {/* Category selection */}
+          {/* Password field */}
           <div className="form-group row justify-content-center">
             <div className="col-md-4">
-              <label htmlFor="inputGroupSelect">Category<span className="text-danger">*</span></label>
-              <select
-            className="custom-select w-100 rounded p-2"
-            id="inputGroupSelect"
-            style={{ border: '1px solid gray', background: 'none' }}
-            value={formData.category_id} // Bind value to formData.category_id
-            name="category_id"
-            onChange={handleCategoryChange} // Call handleCategoryChange on change
-          >
-            {/* Add a default option with an empty value */}
-            <option value="">Choose...</option>
-            {categoryData.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </select>
+              <label htmlFor="InputPassword">Password<span className="text-danger">*</span></label>
+              <input type={show} className="form-control" id="InputPassword" aria-describedby="emailHelp" placeholder="Enter password" required value={formData.password} name="password" onChange={handleChange} />
+              <span><input type='checkbox' value='Show Password'className='border-primary pt-2'onClick={passwordViewStateFunction} style={{cursor:"pointer"}}/><label><small> Show Password</small></label></span>
+
             </div>
           </div>
+
+         
 
           {/* Submit button */}
           <div className="form-group row justify-content-center">
@@ -257,6 +264,15 @@ const EditContact = () => {
             </div>
           </div>
         </div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-4">
+              <Link to="/home">
+                <button className="btn btn-outline-danger w-100 mt-2 mb-2">Delete Account</button>
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <div style={{ height: '150px' }} id="border_div"></div>
       </div>
@@ -265,4 +281,4 @@ const EditContact = () => {
   );
 };
 
-export default EditContact;
+export default EditUser;
