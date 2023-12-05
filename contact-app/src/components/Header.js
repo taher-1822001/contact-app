@@ -5,7 +5,7 @@ function Header(){
         <>
         <nav className="navbar bg-warning  bg-gradient" >
             <div className="container-fluid justify-content-center">
-                <h2 className='text-dark'>Contact Manager</h2>
+                <h2 className='text-dark'>Twist Contact Manager</h2>
             </div>
         </nav>
         </>

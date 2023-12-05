@@ -14,14 +14,14 @@ import BASE_URL from './config';
 
 const EditContact = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    category_id: '',
+    password: '',
     image:'',
     // created_by:Cookies.get('email')
   });
-console.log("created by: ", formData.created_by);
   const [image, setImage] = useState(null); // State for image source
   const [imgFile, setImgFile] = useState(null); // State for image file
   const [id, setId] = useState(Cookies.get('id'));
@@ -59,10 +59,11 @@ console.log("created by: ", formData.created_by);
       setSetLoading(true);
       const formData1 = new FormData();
   
-      formData1.append('name', formData.name);
+      formData1.append('firstName', formData.firstName);
+      formData1.append('lastName', formData.lastName);
       formData1.append('email', formData.email);
       formData1.append('phone', formData.phone);
-      formData1.append('category_id', formData.category_id);
+      formData1.append('password', formData.password);
   
       if (formData.image) {
         formData1.append('image', formData.image); // Use updated image if there's a change
@@ -72,20 +73,20 @@ console.log("created by: ", formData.created_by);
         formData1.append('image', image);
       }
   
-      formData1.append('user_id', id);
       formData1.append('created_by', created_by);
   
-      let url = `${BASE_URL}/contacts/${params.id}`;
+      let url = `${BASE_URL}/user/${params.id}`;
       const response = await axios.put(url, formData1);
       
       console.log('Update successful:', response.data);
       toast.success('Update successful');
       setRoute(true);
       setFormData({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         phone: '',
-        category_id: '',
+        password: '',
         image: ''
       });
       setImage('');

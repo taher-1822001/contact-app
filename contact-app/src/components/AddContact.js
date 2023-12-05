@@ -1,5 +1,5 @@
 import React from 'react'
-import userImage from './RegisterForm/user.png'
+import userImage from './RegisterForm/addUser.png'
 import Header from './Header';
 import ToggleBar from './ToggleBar/ToggleBar';
 import Footer from './Footer';

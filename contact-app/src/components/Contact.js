@@ -1,5 +1,5 @@
 import React from 'react';
-import userImage from './RegisterForm/user.png';
+import userImage from './RegisterForm/userImage.png';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
