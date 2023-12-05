@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 class ToggleBar extends React.Component {
   constructor(props) {
     super(props);
+    Cookies.set('darkTheme', false);
 
     this.state = {
       isDarkTheme: Cookies.get('darkTheme'),
@@ -18,22 +19,15 @@ class ToggleBar extends React.Component {
       userImage: Cookies.get('userImage'),
       toLogin: false
     };
-    // Cookies.set('darkTheme', false);
   }
   toggleTheme = () => {
-    const newTheme = !this.state.isDarkTheme; // Toggle the theme
-    this.setState({ isDarkTheme: newTheme });
-
-    // Set the cookie to store the theme preference
-    Cookies.set('darkTheme', newTheme);
-
-    // Set body background and text color based on the theme
-    if (newTheme) {
-      document.body.style.backgroundColor = 'black';
-      document.body.style.color = 'white';
-    } else {
-      document.body.style.backgroundColor = 'white';
-      document.body.style.color = 'black';
+    if(this.state.isDarkTheme){
+      Cookies.set('darkTheme', false);
+      this.setState({isDarkTheme:Cookies.get('darkTheme')});
+    }
+    else{
+      Cookies.set('darkTheme',true);
+      this.setState({isDarkTheme:Cookies.get('darkTheme')});
     }
   };
 

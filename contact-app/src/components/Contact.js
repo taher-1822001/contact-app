@@ -326,7 +326,7 @@ class Contact extends React.Component {
                                         <p><b>Email: </b>{contact.email}</p>
                                         <p><b>Category: </b>{this.state.categoryNames[contact.category_id]}</p>
                                         <div className='m-1' style={{ float: "right" }}>
-                                            <Link to={`/editcontact/${contact.id}`}>
+                                            <Link to={`/contact/edit/${contact.id}`}>
                                                 <button className='btn btn-primary m-1'>
                                                     <i className="fas fa-pencil-alt"></i>
                                                 </button>

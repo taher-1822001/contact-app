@@ -50,7 +50,7 @@ class App extends React.Component {
     <Route path="/register" element={<RegisterForm />} />
     <Route path="/home" element={<HomePage />} />
     <Route path="/contact" element={<AddContact />} />
-    <Route path="/editcontact/:id" element={<EditContact />} />
+    <Route path="/contact/edit/:id" element={<EditContact />} />
     <Route path="/info" element={<Info />} />
     <Route path="/passwordreset" element={<PasswordReset />} />
   </Routes>

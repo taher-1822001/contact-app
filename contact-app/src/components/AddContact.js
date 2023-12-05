@@ -158,31 +158,25 @@ class AddContact extends React.Component {
   };
 
   toggleTheme = () => {
-    const newTheme = !this.state.isDarkTheme; // Toggle the theme
-    this.setState({ isDarkTheme: newTheme });
-  
-    // Set the cookie to store the theme preference
-    Cookies.set('darkTheme', newTheme);
-  
-    // Set body background and text color based on the theme
-    if (newTheme) {
+    if(this.state.isDarkTheme){
       document.body.style.backgroundColor = 'black';
       document.body.style.color = 'white';
-  
-      // Update input field color for dark theme
-      const inputs = document.getElementsByTagName('input');
-      for (let i = 0; i < inputs.length; i++) {
-        inputs[i].style.color = 'white';
-      }
-    } else {
-      document.body.style.backgroundColor = 'white';
-      document.body.style.color = 'black';
   
       // Update input field color for light theme
       const inputs = document.getElementsByTagName('input');
       for (let i = 0; i < inputs.length; i++) {
-        inputs[i].style.color = 'black';
+        inputs[i].style.color = 'white';
       }
+    }
+    else{
+      document.body.style.backgroundColor = 'white';
+    document.body.style.color = 'black';
+
+    // Update input field color for light theme
+    const inputs = document.getElementsByTagName('input');
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].style.color = 'black';
+    }
     }
   };
   

@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router-dom'; // Assuming you're using Reac
 import Header from './Header';
 import ToggleBar from './ToggleBar/ToggleBar';
 import Footer from './Footer';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner/LoadingSpinner';
 import Cookies from 'js-cookie'
@@ -25,7 +25,9 @@ console.log("created by: ", formData.created_by);
   const [image, setImage] = useState(null); // State for image source
   const [imgFile, setImgFile] = useState(null); // State for image file
   const [id, setId] = useState(Cookies.get('id'));
-  const [created_by, setCreatedBy] = useState(Cookies.get('email'))
+  const [created_by, setCreatedBy] = useState(Cookies.get('email'));
+  const [setLoading, setSetLoading] = useState(false);
+  const [route, setRoute] = useState(false);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -54,6 +56,7 @@ console.log("created by: ", formData.created_by);
   const ContactFormHandler = async (e) => {
     e.preventDefault();
     try {
+      setSetLoading(true);
       const formData1 = new FormData();
   
       formData1.append('name', formData.name);
@@ -74,8 +77,10 @@ console.log("created by: ", formData.created_by);
   
       let url = `${BASE_URL}/contacts/${params.id}`;
       const response = await axios.put(url, formData1);
-  
+      
       console.log('Update successful:', response.data);
+      toast.success('Update successful');
+      setRoute(true);
       setFormData({
         name: '',
         email: '',
@@ -86,10 +91,11 @@ console.log("created by: ", formData.created_by);
       setImage('');
     } catch (error) {
       console.error('Contact creation failure:', error);
+      toast.error('Contact creation failure');
       // Handle error (e.g., show error message)
     } finally {
       // Set loading state to false
-      // setLoading(false);
+      setSetLoading(false);
     }
   };
   
@@ -164,6 +170,8 @@ console.log("created by: ", formData.created_by);
     <>
     {console.log("image path", formData.image)}
       <ToastContainer />
+      {route && <Navigate to='/home' />}
+      {setLoading && <LoadingSpinner />}
       {/* Assuming formData.toLogin and formData.setLoading are defined */}
       {formData.toLogin && <Navigate to="/" />}
       {formData.setLoading && <LoadingSpinner />}
@@ -179,7 +187,7 @@ console.log("created by: ", formData.created_by);
             {/* Image upload */}
             <input type="file" onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} id="fileInput" />
             <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: 'pointer', border: '5px solid yellow' }}>
-              <img src={typeof(formData.image)=='string'?formData.image: URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
+              <img src={typeof(formData.image)=='string'?formData.image: formData.image!=='' || formData.image!==null?userImage:URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
             </div>
           </center>
 
