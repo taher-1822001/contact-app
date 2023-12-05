@@ -179,7 +179,7 @@ console.log("created by: ", formData.created_by);
             {/* Image upload */}
             <input type="file" onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} id="fileInput" />
             <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: 'pointer', border: '5px solid yellow' }}>
-              <img src={formData.image} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
+              <img src={typeof(formData.image)=='string'?formData.image: URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
             </div>
           </center>
 
