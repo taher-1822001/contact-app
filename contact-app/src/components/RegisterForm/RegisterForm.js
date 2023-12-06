@@ -1,8 +1,8 @@
 import React from 'react';
 import 'cropperjs/dist/cropper.css';
 import LoginForm from '../LoginForm';
-import './user.png'
-import userImage from './user.png';
+import './addUser.png'
+import userImage from './addUser.png';
 import Header from '../Header';
 import ToggleBar from '../ToggleBar/ToggleBar';
 import Footer from '../Footer';

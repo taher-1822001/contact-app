@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Import the necessary FontAwesome icons
 import Cookies from 'js-cookie';
 import Dropdown from 'react-bootstrap/Dropdown';
-import userImage from '../RegisterForm/user.png';
+import userImage from '../RegisterForm/userImage.png';
 import {Link, Navigate } from 'react-router-dom'; 
 import { ToastContainer, toast } from 'react-toastify';
 class ToggleBar extends React.Component {

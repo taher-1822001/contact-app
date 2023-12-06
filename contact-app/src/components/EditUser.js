@@ -20,6 +20,7 @@ const EditUser = () => {
     phone: '',
     password: '',
     image: '',
+    yes:''
     // created_by:Cookies.get('email')
   });
   const [image, setImage] = useState(null); // State for image source
@@ -28,8 +29,9 @@ const EditUser = () => {
   const [created_by, setCreatedBy] = useState(Cookies.get('email'));
   const [setLoading, setSetLoading] = useState(false);
   const [route, setRoute] = useState(false);
+  const [route1, setRoute1] = useState(false);
   const [show, setShow] = useState("password");
-  const [yes, setYes] = useState('');
+  // const [yes, setYes] = useState('');
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -54,9 +56,9 @@ const EditUser = () => {
     }
   };
 
-  const handleYesChange = (e) => {
-    setYes(e.target.value);
-  };
+  // const handleYesChange = (e) => {
+  //   setYes(e.target.value);
+  // };
 
   const ContactFormHandler = async (e) => {
     e.preventDefault();
@@ -208,22 +210,27 @@ const EditUser = () => {
     );
   }
   const handleDelete = () => {
+    let deleteConfirmation = null; // Define a local variable to store the input value
+  
     toast.warn(
       <div>
         <p>Enter "yes" to delete</p>
-       <form>
-       <input
-          type="text"
-          className="form-control m-1"
-          id="yes"
-          aria-describedby="emailHelp"
-          placeholder="Enter yes"
-          value={yes}
-          required
-          name="yes"
-          onChange={handleYesChange}
-        />
-       </form>
+        <form>
+          <input
+            type="text"
+            className="form-control m-1"
+            id="yes"
+            aria-describedby="emailHelp"
+            placeholder="Enter yes"
+            // Use the local variable for value instead of formData.yes
+            value={deleteConfirmation}
+    
+            name="yes"
+            onChange={(e) => {
+              deleteConfirmation= e.target.value; // Update the local variable
+            }}
+          />
+        </form>
         <button
           className="btn btn-outline-warning m-1"
           style={{ float: 'right' }}
@@ -234,7 +241,7 @@ const EditUser = () => {
         <button
           className="btn btn-warning m-1"
           style={{ float: 'right' }}
-          onClick={handleDeleteConfirmation}
+          onClick={() => handleDeleteConfirmation(deleteConfirmation)} // Pass the local variable to handleDeleteConfirmation
         >
           Delete
         </button>
@@ -243,28 +250,33 @@ const EditUser = () => {
         position: toast.POSITION.TOP_CENTER,
         autoClose: false,
         closeButton: false,
-        closeOnClick: false, // Prevent dismiss when clicking inside the toast
+        closeOnClick: false,
       }
     );
   };
   
-  const handleDeleteConfirmation = () => {
-    console.log("yes text", yes)
-    if (yes.toLowerCase() === 'yes') {
-      // Implement your logic to delete the account here
-      // This could involve sending a request to your server to delete the user's account
-      toast.success('Account deleted successfully');
-      // Redirect or perform other actions after successful deletion
+  const handleDeleteConfirmation = (confirmation) => {
+    if (confirmation.toLowerCase() === 'yes') {
+      const url = `${BASE_URL}/users/${params.id}`
+      axios.delete(url)
+      .then(response =>{
+        toast.success('Account deleted successfully');
+        Cookies.set('email','');
+        Cookies.set('userImage','');
+        Cookies.set('id','');
+        setRoute1(true)
+
+      })
     } else {
-      toast.error(`Invalid input: ${yes}`); // Display an error toast with the input text
+      toast.error(`Invalid input: ${confirmation}`);
     }
   };
-
   return (
     <>
       {console.log("image path", formData.image)}
       <ToastContainer />
       {route && <Navigate to='/home' />}
+      {route1 && <Navigate to='/' />}
       {setLoading && <LoadingSpinner />}
       {/* Assuming formData.toLogin and formData.setLoading are defined */}
       {formData.toLogin && <Navigate to="/" />}
