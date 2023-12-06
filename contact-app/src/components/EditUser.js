@@ -19,7 +19,7 @@ const EditUser = () => {
     email: '',
     phone: '',
     password: '',
-    image:'',
+    image: '',
     // created_by:Cookies.get('email')
   });
   const [image, setImage] = useState(null); // State for image source
@@ -29,13 +29,14 @@ const EditUser = () => {
   const [setLoading, setSetLoading] = useState(false);
   const [route, setRoute] = useState(false);
   const [show, setShow] = useState("password");
+  const [yes, setYes] = useState('');
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       // Create a URL for the selected image file
       // const imageUrl = URL.createObjectURL(file);
@@ -52,20 +53,23 @@ const EditUser = () => {
       setImage(''); // Reset image preview
     }
   };
-  
+
+  const handleYesChange = (e) => {
+    setYes(e.target.value);
+  };
 
   const ContactFormHandler = async (e) => {
     e.preventDefault();
     try {
       setSetLoading(true);
       const formData1 = new FormData();
-  
+
       formData1.append('first_name', formData.firstName);
       formData1.append('last_name', formData.lastName);
       formData1.append('email', formData.email);
       formData1.append('phone', formData.phone);
       formData1.append('password', formData.password);
-  
+
       if (formData.image) {
         formData1.append('image', formData.image); // Use updated image if there's a change
       } else {
@@ -73,12 +77,12 @@ const EditUser = () => {
         // Assuming the existing image data is stored in formData.image
         formData1.append('image', image);
       }
-  
+
       formData1.append('created_by', created_by);
-  
+
       let url = `${BASE_URL}/users/${params.id}`;
       const response = await axios.put(url, formData1);
-      
+
       console.log('Update successful:', response.data);
       toast.success('Update successful');
       setRoute(true);
@@ -100,7 +104,7 @@ const EditUser = () => {
       setSetLoading(false);
     }
   };
-  
+
   const handleClickImage = () => {
     document.getElementById('fileInput').click();
   };
@@ -131,12 +135,12 @@ const EditUser = () => {
     if (params.id) {
       getUserData(params.id);
     }
- 
+
   }, [params.id]); // Empty dependency array ensures it runs only once on mount
 
   useEffect(() => {
     // ...
-  
+
     return () => {
       // Cleanup object URL to avoid memory leaks
       URL.revokeObjectURL(image);
@@ -147,7 +151,7 @@ const EditUser = () => {
     axios.get(url)
       .then(response => {
         let data = response.data.data;
-        
+
         setFormData({
           firstName: data.first_name,
           lastName: data.last_name,
@@ -162,25 +166,103 @@ const EditUser = () => {
         console.error('Error fetching contact data:', error);
       });
   };
-  
+
   const handleCategoryChange = (e) => {
     setFormData({
       ...formData,
       category_id: e.target.value // Update category_id in the state
     });
   };
- const passwordViewStateFunction = () =>{
-    if(show==="password")
-    {
-        setShow("text")
+  const passwordViewStateFunction = () => {
+    if (show === "password") {
+      setShow("text")
     }
-    else{
-        setShow("password")
+    else {
+      setShow("password")
     }
-}
+  }
+  const deleteNotification = () => {
+    toast.warn(
+      <div>
+        <p>Are you sure you want to delete your account?</p>
+        <button
+          className='btn btn-outline-warning m-1'
+          style={{ float: 'right' }}
+          onClick={() => toast.dismiss()} // Dismiss the toast on "No" button click
+        >
+          No
+        </button>
+        <button
+          className='btn btn-warning m-1'
+          style={{ float: 'right' }}
+          onClick={handleDelete}
+        >
+          Yes
+        </button>
+      </div>,
+      {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: false,
+        closeButton: false,
+      }
+    );
+  }
+  const handleDelete = () => {
+    toast.warn(
+      <div>
+        <p>Enter "yes" to delete</p>
+       <form>
+       <input
+          type="text"
+          className="form-control m-1"
+          id="yes"
+          aria-describedby="emailHelp"
+          placeholder="Enter yes"
+          value={yes}
+          required
+          name="yes"
+          onChange={handleYesChange}
+        />
+       </form>
+        <button
+          className="btn btn-outline-warning m-1"
+          style={{ float: 'right' }}
+          onClick={() => toast.dismiss()}
+        >
+          Cancel
+        </button>
+        <button
+          className="btn btn-warning m-1"
+          style={{ float: 'right' }}
+          onClick={handleDeleteConfirmation}
+        >
+          Delete
+        </button>
+      </div>,
+      {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: false,
+        closeButton: false,
+        closeOnClick: false, // Prevent dismiss when clicking inside the toast
+      }
+    );
+  };
+  
+  const handleDeleteConfirmation = () => {
+    console.log("yes text", yes)
+    if (yes.toLowerCase() === 'yes') {
+      // Implement your logic to delete the account here
+      // This could involve sending a request to your server to delete the user's account
+      toast.success('Account deleted successfully');
+      // Redirect or perform other actions after successful deletion
+    } else {
+      toast.error(`Invalid input: ${yes}`); // Display an error toast with the input text
+    }
+  };
+
   return (
     <>
-    {console.log("image path", formData.image)}
+      {console.log("image path", formData.image)}
       <ToastContainer />
       {route && <Navigate to='/home' />}
       {setLoading && <LoadingSpinner />}
@@ -199,7 +281,7 @@ const EditUser = () => {
             {/* Image upload */}
             <input type="file" onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} id="fileInput" />
             <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: 'pointer', border: '5px solid yellow' }}>
-              <img src={typeof(formData.image)=='string'?formData.image: formData.image!=='' || formData.image!==null?userImage:URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
+              <img src={typeof (formData.image) == 'string' ? formData.image : formData.image === '' || formData.image === null ? userImage : URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%', overflow: "auto" }} onClick={handleClickImage} />
             </div>
           </center>
 
@@ -239,12 +321,12 @@ const EditUser = () => {
             <div className="col-md-4">
               <label htmlFor="InputPassword">Password<span className="text-danger">*</span></label>
               <input type={show} className="form-control" id="InputPassword" aria-describedby="emailHelp" placeholder="Enter password" required value={formData.password} name="password" onChange={handleChange} />
-              <span><input type='checkbox' value='Show Password'className='border-primary pt-2'onClick={passwordViewStateFunction} style={{cursor:"pointer"}}/><label><small> Show Password</small></label></span>
+              <span><input type='checkbox' value='Show Password' className='border-primary pt-2' onClick={passwordViewStateFunction} style={{ cursor: "pointer" }} /><label><small> Show Password</small></label></span>
 
             </div>
           </div>
 
-         
+
 
           {/* Submit button */}
           <div className="form-group row justify-content-center">
@@ -267,9 +349,9 @@ const EditUser = () => {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-4">
-              <Link to="/home">
-                <button className="btn btn-outline-danger w-100 mt-2 mb-2">Delete Account</button>
-              </Link>
+
+              <button className="btn btn-outline-danger w-100 mt-2 mb-2" onClick={deleteNotification}>Delete Account</button>
+
             </div>
           </div>
         </div>

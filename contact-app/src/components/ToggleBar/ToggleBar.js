@@ -68,7 +68,7 @@ class ToggleBar extends React.Component {
   render() {
     return (
       <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {this.state.toLogin && <Navigate to='/' />}
       <div className='w-100 bg-warning bg-gradient'>
         <div className="toggle-bar container-fluid">
