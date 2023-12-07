@@ -74,7 +74,6 @@ class UsersListCreate(APIView):
             print('Failed to send OTP:', str(e))
             return False
 
-    @transaction.atomic
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
         error_data = {}
@@ -86,48 +85,61 @@ class UsersListCreate(APIView):
             error_data["password"] = "Passwords don't match"
 
         email = data.get('email')
-        print(email)
+
+        # Check if an active user with the same email exists
         email_exists_active = User.objects.filter(email__iexact=email.strip(), active=True).exists()
 
         if email_exists_active:
             return Response(data={"email": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-        email_exists_inactive = User.objects.filter(email__iexact=email.strip(), active=False).exists()
-
-        if email_exists_inactive:
-            # If an inactive user with the same email exists, delete it
-            User.objects.filter(email__iexact=email.strip(), active=False).delete()
+        # Other validations and checks...
 
         otp = self.generate_otp()
         data['otp'] = otp
-        data['active'] = False  # Set active attribute to False for validation
+        data['active'] = False
 
-        if error_data:
-            return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
+        # Handle image upload to Dropbox
+        access_token = settings.DROP_BOX_KEY
+        uploaded_file = request.FILES.get('image')
 
-        try:
-            serializer = self.serializer_class(data=data)
+        if uploaded_file:
+            try:
+                dbx = dropbox.Dropbox(access_token)
+                email = data['email']
+                file_name = uploaded_file.name
+                file_content = uploaded_file.read()
+                path = f'/users/userprofiles/{email}/{file_name}'
 
-            if serializer.is_valid():
-                # Save the user data to the database
-                instance = serializer.save()
+                # Upload file to Dropbox
+                dbx.files_upload(file_content, path)
 
-                # Handle image upload to Dropbox (code unchanged)
+                # Create a shared link for the uploaded file
+                shared_link = dbx.sharing_create_shared_link(path).url
+                shared_link = shared_link.replace('dl=0', 'dl=1')
+                data['image'] = shared_link
 
-                if self.send_otp_email(email, otp):
-                    response = {
-                        "message": "User created, OTP sent for verification, and image uploaded to Dropbox",
-                        "data": serializer.data
-                    }
-                    return Response(data=response, status=status.HTTP_201_CREATED)
-                else:
-                    return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=data)
 
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if serializer.is_valid():
+            # Save the user data to the database
+            instance = serializer.save()
 
+            if self.send_otp_email(email, otp):
+                response = {
+                    "message": "User created, OTP sent for verification, and image uploaded to Dropbox",
+                    "data": serializer.data
+                }
+                return Response(data=response, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Construct a combined error data including other validation errors
+        error_data.update(serializer.errors)
+        return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
+      
 class UserRetrieveUpdateDestroy(APIView):
     serializer_class = UserSerializer
     def get(self, request:Request, user_id:uuid):

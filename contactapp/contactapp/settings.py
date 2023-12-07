@@ -15,7 +15,7 @@ import secrets
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DROP_BOX_KEY = "sl.BrQq--20N5yU8sQRie7MqA27zTGu80WiRkDS9BI5y889ApGavZizQ906RU93xs2BJ941JLSQK8emPmrIhjAKJQ4o4dqPWvYtjtZtDt1N2oNx4fTIqpUCM2qk-IA_8uYQcuHR5ocTfSXkPOW6t50UyeA"
+DROP_BOX_KEY = "sl.BrQDw14B675-bEdNYVF43qMR9LEsTMxwLqCiVzsqW7DvXYyRi6RFnFR31Fgs-KlW27p7fyArzYN821Ltyv1A2QU6V7ZLDU5973HAEeOvU1RTNay15aNGSVZBEt0eAMjr6dgbuF9fIGnSo2YhNaC-l54"
 EMAIL_API_KEY = "45EAD4861242A7C645A0A2AC4A8417DE8E8CDC1BE719B8031D3D20A470479C2FB2690D8C65DB957E99D1D7B706918C47"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
