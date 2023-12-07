@@ -16,6 +16,7 @@ import secrets
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DROP_BOX_KEY = "sl.BrPRivRdut9WxEVsF5fiUscTLsQYzAX7LvJOndaYnRUEcgAUVHnKTQ6ldD9SJVotjAc5jERe9to8-pe3cbkh4lzC4PsArkRDc8Wk2H3G9wuIehnmE0qs1c23fUvylAgGuEis9uLaCaMZSwyi3c3bSE8"
+EMAIL_API_KEY = "45EAD4861242A7C645A0A2AC4A8417DE8E8CDC1BE719B8031D3D20A470479C2FB2690D8C65DB957E99D1D7B706918C47"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -24,12 +25,13 @@ SECRET_KEY = "django-insecure-5*sv-9h4^o=q0argnzmops135n!h3ca92i20p2re^c()zsxyl-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'twistcontactapp@gmail.com'
-EMAIL_HOST_PASSWORD = 'rgjwektbgyzvlerw'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'taher1822001@gmail.com'
+EMAIL_HOST_PASSWORD = 'alwtxqnpzsgbmmgu'
+
 ALLOWED_HOSTS = ['*']
 
 

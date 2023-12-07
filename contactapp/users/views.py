@@ -22,6 +22,9 @@ import datetime
 import random
 import smtplib
 from email.mime.text import MIMEText
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+import requests
 class UsersListCreate(APIView):
     serializer_class = UserSerializer
     def get(self, request:Request, *args, **kwargs):
@@ -37,28 +40,39 @@ class UsersListCreate(APIView):
         return str(random.randint(100000, 999999))
 
     def send_otp_email(self, email, otp):
-        sender_email = ''  # Replace with your sender email address
-        sender_password = ''  # Replace with your sender email password
+        elastic_email_api_key = settings.EMAIL_API_KEY  # Replace with your Elastic Email API key
+        elastic_email_api_url = 'https://api.elasticemail.com/v2/email/send'
 
-        subject = 'Your OTP for verification'
-        message = f'Your OTP is: {otp}'
+        sender_email = settings.EMAIL_HOST_USER  # Use Mailtrap sender email
+        subject = ' Verify Your Twist Contact App Account'
+        message = f'''
+        Dear User,\n
 
-        msg = MIMEText(message)
-        msg['Subject'] = subject
-        msg['From'] = sender_email
-        msg['To'] = email
+        Thank you for registering with the Twist Contact App!\n
+
+        To complete your account registration, please use the following One Time Password (OTP) for verification:\n
+        Your OTP: {otp}'''
+
+        payload = {
+            'apikey': elastic_email_api_key,
+            'from': sender_email,
+            'subject': subject,
+            'bodyHtml': message,
+            'to': email
+        }
 
         try:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, sender_password)
-            server.sendmail(sender_email, email, msg.as_string())
-            server.quit()
-            print('OTP sent successfully!')
-            return True
-        except Exception as e:
+            response = requests.post(elastic_email_api_url, data=payload)
+            if response.status_code == 200:
+                print('OTP sent successfully!')
+                return True
+            else:
+                print('Failed to send OTP:', response.text)
+                return False
+        except requests.RequestException as e:
             print('Failed to send OTP:', str(e))
             return False
+        
         
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -68,8 +82,9 @@ class UsersListCreate(APIView):
             data['password'] = data['password2']
         else:
             error_data["password"] = "Passwords don't match"
-
+#twistcontactapp@gmail.com alwtxqnpzsgbmmgu
         email = data.get('email')
+        print(email)
         email_check = User.objects.filter(email__iexact=email.strip()).exists()
         if email_check and not User.objects.filter(email__iexact=email.strip(), active=False).exists():
             # Delete the data if the email exists and active is not False

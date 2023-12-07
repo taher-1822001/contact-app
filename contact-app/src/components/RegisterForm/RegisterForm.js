@@ -124,7 +124,7 @@ handleImageChange = (e) => {
             console.log('Registration successful:', response.data);
             console.log("status", response.status)
     
-            toast.success('Registration Successful');
+            toast.success('OTP sent to your email');
             this.setState({
                 setLoading: false,
                 firstName: '',
@@ -139,7 +139,7 @@ handleImageChange = (e) => {
                 pswdStatus:"password"
             
               });
-              this.delayedCall();
+            //   this.delayedCall();
             
         })
         .catch(error => {
@@ -161,6 +161,65 @@ handleImageChange = (e) => {
         })
         
     }
+
+  otpValidation = () => {
+    let otp = null; // Define a local variable to store the input value
+  
+    toast.warn(
+      <div>
+        <p>Verify Your otp</p>
+        <form>
+          <input
+            type="text"
+            className="form-control m-1"
+            id="yes"
+            aria-describedby="emailHelp"
+            placeholder="Enter yes"
+            // Use the local variable for value instead of formData.yes
+            value={otp}
+    
+            name="yes"
+            onChange={(e) => {
+              otp= e.target.value; // Update the local variable
+            }}
+          />
+        </form>
+        <button
+          className="btn btn-outline-warning m-1"
+          style={{ float: 'right' }}
+          onClick={() => toast.dismiss()}
+        >
+          Cancel
+        </button>
+        <button
+          className="btn btn-warning m-1"
+          style={{ float: 'right' }}
+          onClick={() => this.otpVerification(otp)} // Pass the local variable to handleDeleteConfirmation
+        >
+          Submit
+        </button>
+      </div>,
+      {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: false,
+        closeButton: false,
+        closeOnClick: false,
+      }
+    );
+  };
+ otpVerification= (otp) => {
+    if (otp === 'yes') {
+    //   const url = `${BASE_URL}/users/${params.id}`
+    //   axios.delete(url)
+    //   .then(response =>{
+    //     toast.success('Registration Successful');
+        
+
+    //   })
+    } else {
+      toast.error(`Invalid OTP: ${otp}`);
+    }
+  };
     delayedCall = () => {
         // Simulating a function call after a delay
         setTimeout(() => {
