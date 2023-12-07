@@ -19,6 +19,9 @@ from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
 import datetime
+import random
+import smtplib
+from email.mime.text import MIMEText
 class UsersListCreate(APIView):
     serializer_class = UserSerializer
     def get(self, request:Request, *args, **kwargs):
@@ -30,53 +33,96 @@ class UsersListCreate(APIView):
         }
         return Response(data=response, status=status.HTTP_200_OK)
     
+    def generate_otp(self):
+        return str(random.randint(100000, 999999))
+
+    def send_otp_email(self, email, otp):
+        sender_email = ''  # Replace with your sender email address
+        sender_password = ''  # Replace with your sender email password
+
+        subject = 'Your OTP for verification'
+        message = f'Your OTP is: {otp}'
+
+        msg = MIMEText(message)
+        msg['Subject'] = subject
+        msg['From'] = sender_email
+        msg['To'] = email
+
+        try:
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, email, msg.as_string())
+            server.quit()
+            print('OTP sent successfully!')
+            return True
+        except Exception as e:
+            print('Failed to send OTP:', str(e))
+            return False
+        
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
         error_data = {}
 
-        if data['password1'] == data['password2']:
+        if 'password1' in data and 'password2' in data and data['password1'] == data['password2']:
             data['password'] = data['password2']
         else:
             error_data["password"] = "Passwords don't match"
 
-        email_check = User.objects.filter(email__iexact=data['email'].strip()).exists()
-        if email_check:
-            error_data['email'] = "Email already exists"
+        email = data.get('email')
+        email_check = User.objects.filter(email__iexact=email.strip()).exists()
+        if email_check and not User.objects.filter(email__iexact=email.strip(), active=False).exists():
+            # Delete the data if the email exists and active is not False
+            User.objects.filter(email__iexact=email.strip()).delete()
+
+        otp = self.generate_otp()
+        data['otp'] = otp
+        data['active'] = False  # Set active attribute to False for validation
 
         if error_data:
             return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            access_token = settings.DROP_BOX_KEY
-            uploaded_file = request.data.get('image')
-
-            if uploaded_file:  
-                email = data['email']
-                file_name = uploaded_file.name
-                file_content = uploaded_file.read()
-                path = f'/users/userprofiles/{email}/{file_name}'
-
-                dbx = dropbox.Dropbox(access_token)
-                dbx.files_upload(file_content, path)
-
-                shared_link = dbx.sharing_create_shared_link(path).url
-
-                # Update the user data dictionary with the Dropbox file path
-                # Modify the shared link URL if needed (change dl=0 to dl=1)
-                shared_link = shared_link.replace('dl=0', 'dl=1')
-                data['image'] = shared_link
-
-
             serializer = self.serializer_class(data=data)
 
             if serializer.is_valid():
-                serializer.save()
+                # Save the user data to the database
+                instance = serializer.save()
 
-                response = {
-                    "message": "User created and file uploaded to Dropbox",
-                    "data": serializer.data
-                }
-                return Response(data=response, status=status.HTTP_201_CREATED)
+                # Handle image upload to Dropbox
+                access_token = settings.DROP_BOX_KEY  # Replace with your Dropbox access token
+                uploaded_file = request.FILES.get('image')
+
+                if uploaded_file:
+                    try:
+                        dbx = dropbox.Dropbox(access_token)
+                        email = data['email']
+                        file_name = uploaded_file.name
+                        file_content = uploaded_file.read()
+                        path = f'/users/userprofiles/{email}/{file_name}'
+
+                        # Upload file to Dropbox
+                        dbx.files_upload(file_content, path)
+
+                        # Create a shared link for the uploaded file
+                        shared_link = dbx.sharing_create_shared_link(path).url
+                        shared_link = shared_link.replace('dl=0', 'dl=1')
+
+                        # Update the instance with the Dropbox file path
+                        instance.image = shared_link
+                        instance.save()
+
+                    except Exception as e:
+                        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                if self.send_otp_email(email, otp):
+                    response = {
+                        "message": "User created, OTP sent for verification, and image uploaded to Dropbox",
+                        "data": serializer.data
+                    }
+                    return Response(data=response, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

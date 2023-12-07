@@ -8,12 +8,8 @@ class User(models.Model):
     email = models.EmailField(max_length=512)
     phone = models.BigIntegerField()
     password = models.CharField(max_length=512)
-    image= models.TextField(blank=True, null=True)
+    image = models.TextField(blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now_add=True)
-
-
-
-
-
-    
+    otp = models.TextField(default='')
+    active = models.BooleanField(default=False)

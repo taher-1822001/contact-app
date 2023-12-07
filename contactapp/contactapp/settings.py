@@ -15,7 +15,7 @@ import secrets
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DROP_BOX_KEY = "sl.BrL_f5NfkqvR_bYFXzqbPt0nsTTAnxQYmPpdopVr7C9J_5UxhVyNa0_JRtppIjSSvwUipRgckLHh9wXQn9YcbeDinZK-LeVWnPP3kdYkj2TpTX9EOYlsPMseJ3j0yvYw35n3mRAVYzcXIrQape4N5QI"
+DROP_BOX_KEY = "sl.BrPRivRdut9WxEVsF5fiUscTLsQYzAX7LvJOndaYnRUEcgAUVHnKTQ6ldD9SJVotjAc5jERe9to8-pe3cbkh4lzC4PsArkRDc8Wk2H3G9wuIehnmE0qs1c23fUvylAgGuEis9uLaCaMZSwyi3c3bSE8"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -24,7 +24,12 @@ SECRET_KEY = "django-insecure-5*sv-9h4^o=q0argnzmops135n!h3ca92i20p2re^c()zsxyl-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'twistcontactapp@gmail.com'
+EMAIL_HOST_PASSWORD = 'rgjwektbgyzvlerw'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 ALLOWED_HOSTS = ['*']
 
 
