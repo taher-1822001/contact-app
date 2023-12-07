@@ -47,7 +47,7 @@ class LoginForm extends React.Component
     LoginLinkFunction = () =>{
         if(this.state.passwordState===true && this.state.newUserState===true)
         {
-            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Login Link"});
+            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Password Reset Link"});
         }
     }
     forgotPasswordStateFunction = () => {

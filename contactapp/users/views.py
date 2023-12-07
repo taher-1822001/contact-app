@@ -91,8 +91,13 @@ class UsersListCreate(APIView):
 
         if email_exists_active:
             return Response(data={"email": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Other validations and checks...
+        
+        
+        # Check if an inactive user with the same email exists
+        email_exists_inactive = User.objects.filter(email__iexact=email.strip(), active=False).exists()
+        if email_exists_inactive:
+            # If an inactive user with the same email exists, delete it
+            User.objects.filter(email__iexact=email.strip(), active=False).delete()
 
         otp = self.generate_otp()
         data['otp'] = otp
