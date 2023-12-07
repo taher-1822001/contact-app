@@ -35,7 +35,9 @@ class RegisterForm extends React.Component {
             img_path:'',
             fname:'',
             imgf:'',
-            pswdStatus:"password"
+            pswdStatus:"password",
+            id:'',
+            otp:''
         };
         Cookies.set('page', 'register')
     }
@@ -123,8 +125,9 @@ handleImageChange = (e) => {
             
             console.log('Registration successful:', response.data);
             console.log("status", response.status)
-    
+            
             toast.success('OTP sent to your email');
+            this.otpValidation();
             this.setState({
                 setLoading: false,
                 firstName: '',
@@ -136,7 +139,9 @@ handleImageChange = (e) => {
                 image: userImage,
                 passwordError: false,
                 emailError: false,
-                pswdStatus:"password"
+                pswdStatus:"password",
+                id:response.data.data.id,
+                otp:response.data.data.otp
             
               });
             //   this.delayedCall();
@@ -208,14 +213,16 @@ handleImageChange = (e) => {
     );
   };
  otpVerification= (otp) => {
-    if (otp === 'yes') {
-    //   const url = `${BASE_URL}/users/${params.id}`
-    //   axios.delete(url)
-    //   .then(response =>{
-    //     toast.success('Registration Successful');
-        
+    if (otp === this.state.otp) {
+      const url = `${BASE_URL}/users/register/${this.state.id}`
+      let formData = new FormData();
+      formData.append('active',true);
+      axios.patch(url, formData)
+      .then(response =>{
+        toast.success('Registration Successful');
+        this.delayedCall();
 
-    //   })
+      })
     } else {
       toast.error(`Invalid OTP: ${otp}`);
     }
