@@ -34,7 +34,7 @@ class LoginForm extends React.Component
             userId:Cookies.get('id'),
             toHome:false,
             function:'this.login',
-            userId:''
+            usrId:''
         };
         Cookies.set('page', 'login');
        
@@ -46,33 +46,47 @@ class LoginForm extends React.Component
             this.setState({toHome:true})
         }
     }
-    sendPasswordResetLink = (e) =>{
+    sendPasswordResetLink = async (e) => {
         e.preventDefault();
-        this.getId();
-        let pUrl = `https://3000-taher1822001-contactapp-bb5f2duoflq.ws-us106.gitpod.io/passwordreset/${this.state.userId}`
-        let formData = new FormData();
-        formData.append('url', pUrl);
-        formData.append('email',this.state.email);
-        let url =`${BASE_URL}/users/pswdemail`
-        axios.post(url, formData)
-        .then(response =>{
-            toast.success('Password reset link sent to your email')
-        })
-
-    }
-    getId = () =>{
-        let formData = new FormData();
-        formData.append('email', this.state.email)
-        let url=''
-        axios.get(url, formData)
-        .then(response =>{
-            this.setState({userId:response.data.email});
-            console.log("email", response.data.email);
-        })
-        .catch(error =>{
-            console.log(error);
-        })
-    }
+    
+        // Retrieve the usrId using getId function
+        const usrId = await this.getId();
+        
+        // Check if usrId is valid before proceeding
+        if (usrId) {
+            let pUrl = `https://3000-taher1822001-contactapp-bb5f2duoflq.ws-us106.gitpod.io/passwordreset/${usrId}`;
+            let formData = new FormData();
+            formData.append('url', pUrl);
+            formData.append('email', this.state.email);
+            let url = `${BASE_URL}/users/pswdemail`;
+        
+            axios.post(url, formData)
+                .then(response => {
+                    toast.success('Password reset link sent to your email');
+                })
+                .catch(error => {
+                    console.error('Error sending password reset link:', error);
+                    toast.error('Failed to send password reset link');
+                });
+        } else {
+            console.error('Invalid usrId');
+            toast.error('Failed to send password reset link');
+        }
+    };
+    
+    getId = async () => {
+        try {
+            let url = `${BASE_URL}/users/getid?email=${encodeURIComponent(this.state.email)}`;
+            const response = await axios.get(url);
+            this.setState({ usrId: response.data.id }); // Set usrId state with the retrieved user ID
+            console.log("User ID:", response.data.id);
+            return response.data.id; // Return the user ID
+        } catch (error) {
+            console.error("Error fetching user ID:", error);
+            return null; // Return null if there's an error
+        }
+    };
+    
     LoginLinkFunction = () =>{
         if(this.state.passwordState===true && this.state.newUserState===true)
         {
