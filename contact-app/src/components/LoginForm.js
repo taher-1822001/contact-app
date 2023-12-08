@@ -32,7 +32,9 @@ class LoginForm extends React.Component
             userEmail:Cookies.get('email'),
             userImage:Cookies.get('userImage'),
             userId:Cookies.get('id'),
-            toHome:false
+            toHome:false,
+            function:'this.login',
+            userId:''
         };
         Cookies.set('page', 'login');
        
@@ -44,10 +46,37 @@ class LoginForm extends React.Component
             this.setState({toHome:true})
         }
     }
+    sendPasswordResetLink = (e) =>{
+        e.preventDefault();
+        this.getId();
+        let pUrl = `https://3000-taher1822001-contactapp-bb5f2duoflq.ws-us106.gitpod.io/passwordreset/${this.state.userId}`
+        let formData = new FormData();
+        formData.append('url', pUrl);
+        formData.append('email',this.state.email);
+        let url =`${BASE_URL}/users/pswdemail`
+        axios.post(url, formData)
+        .then(response =>{
+            toast.success('Password reset link sent to your email')
+        })
+
+    }
+    getId = () =>{
+        let formData = new FormData();
+        formData.append('email', this.state.email)
+        let url=''
+        axios.get(url, formData)
+        .then(response =>{
+            this.setState({userId:response.data.email});
+            console.log("email", response.data.email);
+        })
+        .catch(error =>{
+            console.log(error);
+        })
+    }
     LoginLinkFunction = () =>{
         if(this.state.passwordState===true && this.state.newUserState===true)
         {
-            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Password Reset Link"});
+            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Password Reset Link", function:"this.sendPasswordResetLink"});
         }
     }
     forgotPasswordStateFunction = () => {
@@ -61,7 +90,7 @@ class LoginForm extends React.Component
     }
 
     backStateFunction = () =>{
-        this.setState({passwordState: true, newUserState: true, title:"Login", backButtonState: false, buttonText:"Login"});
+        this.setState({passwordState: true, newUserState: true, title:"Login", backButtonState: false, buttonText:"Login", function:"this.login"});
     }
 
     passwordViewStateFunction = () =>{
@@ -134,7 +163,7 @@ class LoginForm extends React.Component
             <div className='container align-items-center mt-5 login'>
             <h2 className="text-center">{this.state.title}</h2>
           
-                <form onSubmit={this.login}>
+                <form onSubmit={this.state.passwordState ? this.login : this.sendPasswordResetLink}>
                 <div className="form-group row justify-content-center">
                     <div className='col-md-4 '>
                     <hr className='mt-2 mb-2'/>

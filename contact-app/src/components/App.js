@@ -54,7 +54,7 @@ class App extends React.Component {
     <Route path="/contact/edit/:id" element={<EditContact />} />
     <Route path="/user/edit/:id" element={<EditUser />} />
     <Route path="/info" element={<Info />} />
-    <Route path="/passwordreset" element={<PasswordReset />} />
+    <Route path="/passwordreset/:id" element={<PasswordReset />} />
 
   </Routes>
 </Router>

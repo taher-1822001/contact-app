@@ -258,4 +258,70 @@ class RegistrationValidation(APIView):
         # Serialize and return the updated user object
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class GetUserIdByEmail(APIView):
+    def get(self, request):
+        email = request.query_params.get('email', None)
+        if email is None:
+            return Response("Email parameter is required", status=status.HTTP_400_BAD_REQUEST)
         
+        try:
+            user = User.objects.get(email=email)
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+
+
+class PasswordReset(APIView):
+    def send_otp_email(self, email, url):
+        elastic_email_api_key = settings.EMAIL_API_KEY
+        elastic_email_api_url = 'https://api.elasticemail.com/v2/email/send'
+        sender_email = settings.EMAIL_HOST_USER
+        subject = 'Password Reset Link'
+        message = f'''
+        Dear User,\n
+
+        We have received a request to reset the password associated with your account. To proceed with resetting your password, please follow the link to reset your password: {url}'''
+
+        payload = {
+            'apikey': elastic_email_api_key,
+            'from': sender_email,
+            'subject': subject,
+            'bodyHtml': message,
+            'to': email
+        }
+
+        try:
+            response = requests.post(elastic_email_api_url, data=payload)
+            if response.status_code == 200:
+                print('Reset Link Sent successfully!')
+                return True
+            else:
+                print('Failed to send reset link:', response.text)
+                return False
+        except requests.RequestException as e:
+            print('Failed to send reset link:', str(e))
+            return False
+        
+    def post(self, request):
+        data = request.data
+        email = data.get('email')
+        url = data.get('url')
+
+        if email and url:
+            if self.send_otp_email(email, url):
+                response_data = {
+                    "message": "Email sent successfully"
+                }
+                return Response(data=response_data, status=status.HTTP_201_CREATED)
+            else:
+                error_data = {
+                    "message": "Failed to send email"
+                }
+                return Response(data=error_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            error_data = {
+                "message": "Email and URL are required fields"
+            }
+            return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
