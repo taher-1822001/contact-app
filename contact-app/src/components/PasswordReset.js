@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-
+import BASE_URL from './config'
+import axios from 'axios'
+import { toast, ToastContainer} from 'react-toastify';
+import { useParams } from 'react-router-dom';
 const PasswordReset = () => {
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -15,12 +19,33 @@ const PasswordReset = () => {
     const [type, setType] = useState("password");
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
-
+    const [check, setCheck] = useState(false);
     const handleShowPassword = () => {
         setType(type === 'password' ? 'text' : 'password');
     };
+    const updatePswd = (e) =>{
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append('password1', password1);
+        formData.append('password2', password2);
+        let url = `${BASE_URL}/users/password/reset/${id}`;
+        axios.patch(url,formData)
+        .then(response =>{
+            toast.success("Password Reset Successful")
+            setPassword1('');
+            setPassword2('');
+        })
+        .catch(error =>{
+            toast.error('Failed to change password');
+            const pswdError = error?.response?.data?.password;
+            if(pswdError){
+                setCheck(true)
+            }
+        })
 
+    }
     const handleChange = (e) => {
+        setCheck(false)
         const { name, value } = e.target;
         if (name === 'password1') {
             setPassword1(value);
@@ -32,13 +57,14 @@ const PasswordReset = () => {
     return (
         <>
             <Header />
+            <ToastContainer />
             {console.log(password1, password2)}
             <div className='container mt-5'>
                 <div className='row justify-content-center '>
                     <div className='col-lg-4'>
                         <h2 style={{ textAlign: "center" }}>Password Reset</h2>
                         <hr />
-                        <form>
+                        <form onSubmit={updatePswd}>
                             <input
                                 type={type}
                                 className="form-control mt-2"
@@ -61,7 +87,7 @@ const PasswordReset = () => {
                                 value={password2}
                                 onChange={handleChange}
                             />
-                            <small className='text-danger' style={{display:'block'}}>password don't match</small>
+                            {check && <small className='text-danger' style={{display:'block'}}>password don't match</small>}
                             <span>
                                 <input
                                     type='checkbox'

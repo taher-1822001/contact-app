@@ -325,3 +325,21 @@ class PasswordReset(APIView):
                 "message": "Email and URL are required fields"
             }
             return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
+
+class newPassword(APIView):
+    serializer_class = UserSerializer
+    def patch(self,request:Request, user_id):
+        data = request.data
+        password1 = data['password1']
+        password2 = data['password2']
+        if password1 !=password2:
+            return Response(data={"password":"password don't match"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user = get_object_or_404(User, pk=user_id)
+            
+            user.password = password2
+            user.save()
+
+            # Serialize and return the updated user object
+            serializer = self.serializer_class(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)

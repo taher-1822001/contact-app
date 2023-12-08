@@ -33,7 +33,6 @@ class LoginForm extends React.Component
             userImage:Cookies.get('userImage'),
             userId:Cookies.get('id'),
             toHome:false,
-            function:'this.login',
             usrId:''
         };
         Cookies.set('page', 'login');
@@ -90,7 +89,7 @@ class LoginForm extends React.Component
     LoginLinkFunction = () =>{
         if(this.state.passwordState===true && this.state.newUserState===true)
         {
-            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Password Reset Link", function:"this.sendPasswordResetLink"});
+            this.setState({passwordState: false, newUserState: false, title:"Forgot Password", backButtonState: true, buttonText: "Send Password Reset Link", });
         }
     }
     forgotPasswordStateFunction = () => {
@@ -104,7 +103,7 @@ class LoginForm extends React.Component
     }
 
     backStateFunction = () =>{
-        this.setState({passwordState: true, newUserState: true, title:"Login", backButtonState: false, buttonText:"Login", function:"this.login"});
+        this.setState({passwordState: true, newUserState: true, title:"Login", backButtonState: false, buttonText:"Login",});
     }
 
     passwordViewStateFunction = () =>{
