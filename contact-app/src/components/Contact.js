@@ -70,10 +70,10 @@ class Contact extends React.Component {
                 const updatedContactList = this.state.contacts.filter(contact => contact.id !== contactId);
                 this.setState({ contacts: updatedContactList, delete: false });
                 toast.dismiss();
-                toast.success('Deletion successful');
+                toast.success('Contact Deleted Successfully');
             })
             .catch(error => {
-                toast.error('Deletion failed');
+                toast.error('Failed to Delete Contact');
                 console.error('Error deleting contact:', error);
             });
     };
@@ -169,7 +169,7 @@ class Contact extends React.Component {
             const excelBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
             saveAs(excelBlob, 'contacts.xlsx');
 
-            toast.success('Excel Sheet download successful');
+            toast.success('Excel Sheet downloaded successfully');
             this.setState({ selectedIDs: [] })
         } catch (error) {
             toast.error('Failed to download Excel Sheet');

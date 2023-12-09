@@ -172,14 +172,14 @@ handleImageChange = (e) => {
   
     toast.warn(
       <div>
-        <p>Verify Your otp</p>
+        <p>Enter Six digit OTP</p>
         <form>
           <input
             type="text"
             className="form-control m-1"
             id="yes"
             aria-describedby="emailHelp"
-            placeholder="Enter yes"
+            placeholder="XXXXXX"
             // Use the local variable for value instead of formData.yes
             value={otp}
     
@@ -214,6 +214,7 @@ handleImageChange = (e) => {
   };
  otpVerification= (otp) => {
     if (otp === this.state.otp) {
+      toast.dismiss();
       const url = `${BASE_URL}/users/register/${this.state.id}`
       let formData = new FormData();
       formData.append('active',true);

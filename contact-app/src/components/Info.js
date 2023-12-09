@@ -23,7 +23,7 @@ class Info extends React.Component{
 
 
 
-                <center><h1 className='pt-1'>Project Overview: Full Stack Contact App</h1></center>
+                <center><h1 className='pt-1 mt-3 mb-3'>Project Overview: Full Stack Contact App</h1></center>
                 <h2>Technologies Used:</h2>
                 <h3>Frontend:</h3>
                 <p>React (JavaScript library for building UI) <br />Bootstrap (Front-end component library for styling)</p>

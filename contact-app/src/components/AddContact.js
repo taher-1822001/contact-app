@@ -133,7 +133,7 @@ class AddContact extends React.Component {
   
     axios.post(`${BASE_URL}/contacts/`, formData1)
       .then(response => {
-        console.log('creation successful:', response.data);
+        console.log('Contact Added:', response.data);
   
         this.setState({
           setLoading: false,
@@ -146,13 +146,13 @@ class AddContact extends React.Component {
           },
         });
   
-        toast.success('Creation Successful');
+        toast.success('Contact Added');
         this.delayedCall();
       })
       .catch(error => {
-        console.error('Contact creation failure:', error);
+        console.error('Failed to add contact:', error);
   
-        // toast.error('Creation Unsuccessful');
+        // toast.error('Failed To Add Contact');
         this.setState({ setLoading: false });
       });
   };

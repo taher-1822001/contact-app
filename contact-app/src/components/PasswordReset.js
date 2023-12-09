@@ -5,6 +5,7 @@ import BASE_URL from './config'
 import axios from 'axios'
 import { toast, ToastContainer} from 'react-toastify';
 import { useParams } from 'react-router-dom';
+import Cookies from 'js-cookie'
 const PasswordReset = () => {
     const { id } = useParams();
     const [formData, setFormData] = useState({
@@ -34,6 +35,9 @@ const PasswordReset = () => {
             toast.success("Password Reset Successful")
             setPassword1('');
             setPassword2('');
+            Cookies.set('id','');
+            Cookies.set('userImage','');
+            Cookies.set('email','');
         })
         .catch(error =>{
             toast.error('Failed to change password');

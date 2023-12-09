@@ -7,6 +7,7 @@ djangorestframework==3.14.0
 dropbox==11.36.2
 idna==3.5
 ply==3.11
+psycopg2-binary==2.9.9
 pytz==2023.3.post1
 requests==2.31.0
 setuptools==69.0.2

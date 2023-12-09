@@ -180,7 +180,7 @@ console.log("created by: ", formData.created_by);
       <ToggleBar />
 
       <div className="container align-items-center">
-        <h2 className="text-center">Edit Contact</h2>
+        <h2 className="text-center mt-3">Edit Contact</h2>
         <hr />
         <form onSubmit={ContactFormHandler}>
           <center>
