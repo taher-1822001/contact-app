@@ -15,7 +15,7 @@ import secrets
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DROP_BOX_KEY = "sl.BrY87w_FALcqdA-TBl508mD287FyxJs1Z_6meFz8R422V15ciZpopFfketBlHWMWncYK-jvmBu_cyJ55jCF1k_ntcM0WAaD_zgmajdngcuw7Yr-pM-UQLiOEGjVCh7er8zl7Iivp70mCa0O0yw_icd4"
+DROP_BOX_KEY = "sl.BsIGOGySbE0W0Ffdr2jkY_PBSHIJU87u-COJN7eSPae6ZHL2jIeCEUsmrUeAO6nKFbRF6V1chrY_cbDAK1__xeJbeEuAMxn_QjFqp93p7lkP4ShCnxXbWn2o6Up4PVBlhKN_qoyYj3gd0iblJvytMyc"
 EMAIL_API_KEY = "45EAD4861242A7C645A0A2AC4A8417DE8E8CDC1BE719B8031D3D20A470479C2FB2690D8C65DB957E99D1D7B706918C47"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -96,17 +96,10 @@ WSGI_APPLICATION = "contactapp.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rlwhfzny',  # Database name
-        'USER': 'rlwhfzny',  # Username
-        'PASSWORD': '9AufphAmGzAGnIItgRS0kdT7i5oTDTlC',  # Password
-        'HOST': 'floppy.db.elephantsql.com',  # Host
-        'PORT': '5432',  # Default PostgreSQL port is usually 5432
+        'ENGINE': 'django.db.backends.sqlite3',   # Database engine (SQLite)
+        'NAME': BASE_DIR / 'db.sqlite3',          # Database file path (SQLite)
     }
-
-
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

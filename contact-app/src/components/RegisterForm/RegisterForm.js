@@ -37,7 +37,9 @@ class RegisterForm extends React.Component {
             imgf:'',
             pswdStatus:"password",
             id:'',
-            otp:''
+            otp:'',
+            pswdLengthCheck:false,
+            btnDisabled:true
         };
         Cookies.set('page', 'register')
     }
@@ -87,6 +89,7 @@ handleImageChange = (e) => {
     
 
           changeHandler = (e) =>{
+            this.checkPasswordLength();
         this.setState({[e.target.name]: e.target.value, passwordError:false})
     }
     emailChangeHandler = (e) =>{
@@ -235,7 +238,18 @@ handleImageChange = (e) => {
           this.setState({route:true})
         }, 3000); // Delay time is specified in milliseconds (5 seconds in this case)
       };
-    
+      // componentDidMount(){
+        
+      // }
+    checkPasswordLength =()=>{
+      if(this.state.password1.length<7){
+        this.setState({pswdLengthCheck:true, btnDisabled:true})
+        
+      }
+      else{
+        this.setState({pswdLengthCheck:false, btnDisabled:false})
+      }
+    }
     render() {
         const { image, RegisterFormState, firstName, lastName, email, phone, password1, password2 } = this.state;
      
@@ -295,6 +309,10 @@ handleImageChange = (e) => {
                         <label htmlFor="password1">Password<span className='text-danger'>*</span></label>
                         <input type={this.state.pswdStatus} className="form-control" id="password1" aria-describedby="psHelp" name="password1" placeholder="Enter Password" required value={password1} onChange={this.changeHandler} />
                         
+                        {this.state.pswdLengthCheck &&
+                        
+                        <small className="text-danger">Password should be atleast 8 characters long</small>
+                        }
                         </div>
                         <div className='col-lg-6'>
                         <label htmlFor="password2">Repeat Password<span className='text-danger'>*</span></label>
@@ -304,7 +322,7 @@ handleImageChange = (e) => {
                         </div>
     
                         <div className='col-lg-6 mt-3 mb-2'>
-                        <button type="submit" className="btn btn-warning w-100 mt-2 mb-2" >Register</button>
+                        <button type="submit" className="btn btn-warning w-100 mt-2 mb-2" disabled={this.state.btnDisabled}>Register</button>
                         </div>
                         
                         <hr />

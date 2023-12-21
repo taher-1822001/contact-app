@@ -66,6 +66,7 @@ class LoginForm extends React.Component
                 .catch(error => {
                     console.error('Error sending password reset link:', error);
                     toast.error('Failed to send password reset link');
+                    
                 });
         } else {
             console.error('Invalid usrId');
@@ -82,7 +83,11 @@ class LoginForm extends React.Component
             return response.data.id; // Return the user ID
         } catch (error) {
             console.error("Error fetching user ID:", error);
-            return null; // Return null if there's an error
+            const emailError = error?.response?.data?.email
+            console.log("email error",error.response.email)
+            if(emailError){
+                this.setState({eError:true});
+            }
         }
     };
     

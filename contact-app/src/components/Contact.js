@@ -289,7 +289,7 @@ class Contact extends React.Component {
                     <div className='row'>
                         {this.state.contacts.map((contact) => (
                             <div className="col-lg-3 col-md-6" key={contact.id} >
-                                <div className="card m-2" style={{ border: "1px solid yellow", background: "none" }}>
+                                <div className="card m-2 rounded" style={{ border: "1px solid yellow", background: "none" }}>
                                     <div className="card-body shadow">
                                         <div style={{ float: 'right' }}>
                                             <input type='checkbox' onChange={() => this.handleCheckboxChange(contact.id)}

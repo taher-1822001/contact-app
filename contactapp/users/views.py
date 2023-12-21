@@ -270,7 +270,7 @@ class GetUserIdByEmail(APIView):
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except User.DoesNotExist:
-            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+            return Response({"email":"User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class PasswordReset(APIView):

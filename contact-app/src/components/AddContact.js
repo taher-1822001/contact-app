@@ -142,7 +142,7 @@ class AddContact extends React.Component {
             email: '',
             phone: '',
             category_id: '',
-            image: userImage,
+            image:'',
           },
         });
   

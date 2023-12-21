@@ -74,11 +74,7 @@ class ToggleBar extends React.Component {
         <div className="toggle-bar container-fluid">
           <div className='row'>
             <div className='col-12 d-flex justify-content-end align-items-center'>
-              <button onClick={this.toggleTheme} className='btn btn-light m-1 p-1' title='Theme'>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src={this.state.isDarkTheme ? lightMode : darkMode} alt="theme" style={{ width: "27px", height: "27px" }} />
-                </div>
-              </button>
+             
 
               <Link to='/info'>
 
