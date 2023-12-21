@@ -10,6 +10,9 @@ import Cookies from 'js-cookie'
 import userImage from './RegisterForm/addUser.png'
 import { useParams } from 'react-router-dom';
 import BASE_URL from './config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 // Assuming you have other necessary components imported as well
 
 const EditContact = () => {
@@ -31,7 +34,15 @@ console.log("created by: ", formData.created_by);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  const handleRemoveImage = (e) => {
+    e.preventDefault(); // Prevents form submission
+  
+    setFormData({
+      ...formData,
+      image: '' // Reset image in formData
+    });
+    setImage(''); // Reset image state
+  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
   
@@ -204,6 +215,9 @@ console.log("created by: ", formData.created_by);
     onClick={handleClickImage}
   />
 </div>
+<button onClick={handleRemoveImage} className="btn btn-danger mt-2">
+    <FontAwesomeIcon icon={faTrashAlt} />
+  </button>
           </center>
 
           {/* Name field */}

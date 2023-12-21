@@ -11,6 +11,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from './LoadingSpinner/LoadingSpinner';
 import { Navigate } from 'react-router-dom';
 import BASE_URL from './config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 class AddContact extends React.Component {
   constructor(props) {
     super(props);
@@ -156,9 +159,7 @@ class AddContact extends React.Component {
         this.setState({ setLoading: false });
       });
   };
-  handleCategoryChange = (e) =>{
-    this.setState({formData:{category_id:e.target.value}})
-  }
+
   toggleTheme = () => {
     if(this.state.isDarkTheme){
       document.body.style.backgroundColor = 'black';
@@ -180,6 +181,11 @@ class AddContact extends React.Component {
       inputs[i].style.color = 'black';
     }
     }
+  };
+ handleRemoveImage = (e) => {
+    e.preventDefault(); // Prevents form submission
+  
+    this.setState({formData:{image:''},image:userImage})
   };
   
   render() {
@@ -210,6 +216,9 @@ class AddContact extends React.Component {
               <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: "pointer", border: "5px solid yellow" }}>
                 <img src={image} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: "50%", }} onClick={this.handleClickImage} onChange={this.changeHandler} />
               </div>
+              <button onClick={this.handleRemoveImage} className="btn btn-danger mt-2">
+    <FontAwesomeIcon icon={faTrashAlt} />
+  </button>
             </center>
             <div className="form-group row justify-content-center">
               <div className='col-md-4 '>
@@ -232,16 +241,15 @@ class AddContact extends React.Component {
                 <small id="emailHelp" className="form-text text-muted">We'll never share your contact's phone number with anyone else.</small>
               </div>
             </div>
-
             <div className='form-group row justify-content-center'>
               <div className='col-md-4'>
                 <label for="inputGroupSelect">Category<span className='text-danger'>*</span></label>
-                <select className="custom-select w-100 rounded  p-2" id="inputGroupSelect" style={{ border: "1px solid gray", background: "none" }} value={formData.category_id} name='category' onChange={this.handleCategoryChange}>
-                  <option selected>Choose...</option>
-                  {categoryData.map((category) => (
-                    <option key={category.id} >{category.name}</option>
-                  ))}
-                </select>
+                <select className="custom-select w-100 rounded p-2" id="inputGroupSelect" style={{ border: "1px solid gray", background: "none" }} value={formData.category_id} name='category_id' onChange={this.handleChange}>
+  <option value="">Choose...</option>
+  {categoryData.map((category) => (
+    <option key={category.id} value={category.id}>{category.name}</option>
+  ))}
+</select>
               </div>
             </div>
 

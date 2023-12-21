@@ -300,7 +300,7 @@ class Contact extends React.Component {
                                                 width: "150px",
                                                 height: "150px",
                                                 border: "2px solid yellow",
-                                                backgroundImage: `url(${contact.image===null || contact.image==='null'?userImage: contact.image})`,
+                                                backgroundImage: `url(${contact.image===null || contact.image==='null' || contact.image===''?userImage: contact.image})`,
                                                 borderRadius: "50%",
                                                 backgroundSize: "cover",
                                                 backgroundPosition: "center",
