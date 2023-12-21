@@ -156,7 +156,9 @@ class AddContact extends React.Component {
         this.setState({ setLoading: false });
       });
   };
-
+  handleCategoryChange = (e) =>{
+    this.setState({formData:{category_id:e.target.value}})
+  }
   toggleTheme = () => {
     if(this.state.isDarkTheme){
       document.body.style.backgroundColor = 'black';
@@ -230,10 +232,11 @@ class AddContact extends React.Component {
                 <small id="emailHelp" className="form-text text-muted">We'll never share your contact's phone number with anyone else.</small>
               </div>
             </div>
+
             <div className='form-group row justify-content-center'>
               <div className='col-md-4'>
                 <label for="inputGroupSelect">Category<span className='text-danger'>*</span></label>
-                <select className="custom-select w-100 rounded  p-2" id="inputGroupSelect" style={{ border: "1px solid gray", background: "none" }} value={formData.category_id} name='category' onChange={this.handleChange}>
+                <select className="custom-select w-100 rounded  p-2" id="inputGroupSelect" style={{ border: "1px solid gray", background: "none" }} value={formData.category_id} name='category' onChange={this.handleCategoryChange}>
                   <option selected>Choose...</option>
                   {categoryData.map((category) => (
                     <option key={category.id} >{category.name}</option>
