@@ -34,25 +34,32 @@ console.log("created by: ", formData.created_by);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    
+  
     if (file) {
-      // Create a URL for the selected image file
-      // const imageUrl = URL.createObjectURL(file);
       setFormData({
         ...formData,
-        image: file // Set the image URL directly to formData.image
+        image: file,
       });
       setImage(file); // Set the image preview
     } else {
-      setFormData({
-        ...formData,
-        image: '' // Reset image if no file selected
-      });
-      setImage(''); // Reset image preview
+      // If no file is selected, keep the existing image
+      if (!formData.image || typeof(formData.image) === 'string') {
+        // If the existing image is a URL (string), keep it
+        setFormData({
+          ...formData,
+          image: formData.image,
+        });
+      } else {
+        // If the existing image is not a URL, reset to empty string
+        setFormData({
+          ...formData,
+          image: '',
+        });
+        setImage(''); // Reset image preview
+      }
     }
   };
   
-
   const ContactFormHandler = async (e) => {
     e.preventDefault();
     try {
@@ -187,8 +194,16 @@ console.log("created by: ", formData.created_by);
             {/* Image upload */}
             <input type="file" onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} id="fileInput" />
             <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: 'pointer', border: '5px solid yellow' }}>
-              <img src={typeof(formData.image)=='string'?formData.image: formData.image==='' || formData.image===null?userImage:URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%',overflow:"auto" }} onClick={handleClickImage} />
-            </div>
+  <img
+    src={
+      (formData.image === '' || formData.image === null || formData.image === "null") ? userImage :
+      (typeof(formData.image) === 'string') ? formData.image : URL.createObjectURL(formData.image)
+    }
+    alt="Preview"
+    style={{ width: '100%', height: 'auto', borderRadius: '50%', overflow: "auto" }}
+    onClick={handleClickImage}
+  />
+</div>
           </center>
 
           {/* Name field */}

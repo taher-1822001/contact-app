@@ -70,6 +70,7 @@ const EditUser = () => {
       formData1.append('last_name', formData.lastName);
       formData1.append('email', formData.email);
       formData1.append('phone', formData.phone);
+      formData1.append('active',true);
       formData1.append('password', formData.password);
 
       if (formData.image) {
@@ -293,8 +294,16 @@ const EditUser = () => {
             {/* Image upload */}
             <input type="file" onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} id="fileInput" />
             <div style={{ width: '200px', height: '200px', borderRadius: '50%', cursor: 'pointer', border: '5px solid yellow' }}>
-              <img src={typeof (formData.image) == 'string' ? formData.image : formData.image === '' || formData.image === null ? userImage : URL.createObjectURL(formData.image)} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '50%', overflow: "auto" }} onClick={handleClickImage} />
-            </div>
+  <img
+    src={
+      (formData.image === '' || formData.image === null || formData.image === "null") ? userImage :
+      (typeof(formData.image) === 'string') ? formData.image : URL.createObjectURL(formData.image)
+    }
+    alt="Preview"
+    style={{ width: '100%', height: 'auto', borderRadius: '50%', overflow: "auto" }}
+    onClick={handleClickImage}
+  />
+</div>
           </center>
 
           {/* firstName field */}

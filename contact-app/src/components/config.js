@@ -1,4 +1,4 @@
-const BASE_URL = 'https://ubiquitous-goggles-w4rqgppjrv4cvjj6-8000.app.github.dev/'
+const BASE_URL = 'https://contactapp-delta.vercel.app'
 
 
 export default BASE_URL;
