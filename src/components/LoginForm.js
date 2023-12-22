@@ -53,7 +53,7 @@ class LoginForm extends React.Component
         
         // Check if usrId is valid before proceeding
         if (usrId) {
-            let pUrl = `https://3000-taher1822001-contactapp-bb5f2duoflq.ws-us106.gitpod.io/passwordreset/${usrId}`;
+            let pUrl = `https://taher-1822001.github.io/contact-app/passwordreset/${usrId}`;
             let formData = new FormData();
             formData.append('url', pUrl);
             formData.append('email', this.state.email);
