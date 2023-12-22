@@ -165,9 +165,9 @@ class LoginForm extends React.Component
             toast.error('login failed')
           });
       };
-      componentDidMount(){
-        this.handleLoginCheck();
-      }
+    //   componentDidMount(){
+    //     this.handleLoginCheck();
+    //   }
     render(){
        
             return(

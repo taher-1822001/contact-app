@@ -47,7 +47,7 @@ class HomePage extends React.Component{
   // }
     componentDidMount(){
       this.getContacts();
-      this.handleLoginCheck();
+      // this.handleLoginCheck();
     }
     render(){
         return(
