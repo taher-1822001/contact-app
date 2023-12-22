@@ -38,13 +38,13 @@ class LoginForm extends React.Component
         Cookies.set('page', 'login');
        
     }
-    handleLoginCheck(){
-        const {userEmail, userImage, userId} = this.state;
-        if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
-        {
-            this.setState({toHome:true})
-        }
-    }
+    // handleLoginCheck(){
+    //     const {userEmail, userImage, userId} = this.state;
+    //     if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
+    //     {
+    //         this.setState({toHome:true})
+    //     }
+    // }
     sendPasswordResetLink = async (e) => {
         e.preventDefault();
     

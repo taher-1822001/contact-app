@@ -38,13 +38,13 @@ class HomePage extends React.Component{
           console.log("error", error)
         })
     }
-    handleLoginCheck(){
-      const {userEmail, userImage, userId} = this.state;
-      if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
-      {
-          this.setState({toHome:true})
-      }
-  }
+  //   handleLoginCheck(){
+  //     const {userEmail, userImage, userId} = this.state;
+  //     if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
+  //     {
+  //         this.setState({toHome:true})
+  //     }
+  // }
     componentDidMount(){
       this.getContacts();
       this.handleLoginCheck();
