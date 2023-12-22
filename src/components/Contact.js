@@ -273,11 +273,11 @@ class Contact extends React.Component {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs === '') ? true : false}> <FontAwesomeIcon icon={faDownload} /></button>
+                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs =='') ? true : false}> <FontAwesomeIcon icon={faDownload} /></button>
 
                         </div>
                         <div className='col justify-content-end' >
-                            <button className='btn btn-danger m-1' style={{ float: "right" }} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs === '') ? true : false} onClick={() => this.handleListDelete()}>
+                            <button className='btn btn-danger m-1' style={{ float: "right" }} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs == '') ? true : false} onClick={() => this.handleListDelete()}>
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
                             <Link to='/contact'> <button className='btn btn-success m-1 ' style={{ float: "right" }}><FontAwesomeIcon icon={faPlus} /></button></Link>

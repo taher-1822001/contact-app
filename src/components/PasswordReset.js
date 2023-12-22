@@ -21,6 +21,8 @@ const PasswordReset = () => {
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [check, setCheck] = useState(false);
+    const [pswdLengthCheck, setPasswordLengthCheck] = useState(false);
+    const [btnDisabled, setBtnDisabled] = useState(true);
     const handleShowPassword = () => {
         setType(type === 'password' ? 'text' : 'password');
     };
@@ -49,6 +51,7 @@ const PasswordReset = () => {
 
     }
     const handleChange = (e) => {
+        checkPasswordLength();
         setCheck(false)
         const { name, value } = e.target;
         if (name === 'password1') {
@@ -57,7 +60,17 @@ const PasswordReset = () => {
             setPassword2(value);
         }
     };
-
+    const checkPasswordLength = () => {
+        if (this.state.password1.length < 7) {
+          setBtnDisabled(true);
+          setPasswordLengthCheck(true);
+    
+        }
+        else {
+            setBtnDisabled(true);
+          setPasswordLengthCheck(true);
+        }
+      }
     return (
         <>
             <Header />
@@ -80,6 +93,7 @@ const PasswordReset = () => {
                                 value={password1}
                                 onChange={handleChange}
                             />
+                            {checkPasswordLength  && <small className='text-danger'>The password should be atleast 8 characters long</small>}
                             <input
                                 type={type}
                                 className="form-control mt-2"
@@ -90,6 +104,7 @@ const PasswordReset = () => {
                                 required
                                 value={password2}
                                 onChange={handleChange}
+                                disabled={btnDisabled}
                             />
                             {check && <small className='text-danger' style={{display:'block'}}>password don't match</small>}
                             <span>
