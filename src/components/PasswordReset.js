@@ -61,16 +61,14 @@ const PasswordReset = () => {
         }
     };
     const checkPasswordLength = () => {
-        if (this.state.password1.length < 7) {
-          setBtnDisabled(true);
-          setPasswordLengthCheck(true);
-    
-        }
-        else {
+        if (password1.length < 7 || password2.length < 7) {
             setBtnDisabled(true);
-          setPasswordLengthCheck(true);
+            setPasswordLengthCheck(true);
+        } else {
+            setBtnDisabled(false);
+            setPasswordLengthCheck(false);
         }
-      }
+    };
     return (
         <>
             <Header />
@@ -104,7 +102,7 @@ const PasswordReset = () => {
                                 required
                                 value={password2}
                                 onChange={handleChange}
-                                disabled={btnDisabled}
+                                
                             />
                             {check && <small className='text-danger' style={{display:'block'}}>password don't match</small>}
                             <span>
@@ -118,7 +116,7 @@ const PasswordReset = () => {
                                 <label><small> Show Password</small></label>
                             </span>
 
-                            <button className='btn btn-warning w-100 ml-1'>Reset Password</button>
+                            <button className='btn btn-warning w-100 ml-1' disabled={btnDisabled}>Reset Password</button>
                         </form>
                         <hr />
                     </div>
