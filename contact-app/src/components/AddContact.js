@@ -128,7 +128,7 @@ class AddContact extends React.Component {
     formData1.append('phone', formData.phone);
     formData1.append('category_id', formData.category_id);
     formData1.append('user_id', id);
-    formData1.append('created_by', formData.created_by);
+    formData1.append('created_by', Cookies.get('email'));
   
     if (image && image !== userImage) {
       formData1.append('image', imgf);
@@ -146,7 +146,7 @@ class AddContact extends React.Component {
             phone: '',
             category_id: '',
             image:'',
-          },
+          },image:userImage
         });
   
         toast.success('Contact Added');
