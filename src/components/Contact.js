@@ -169,7 +169,7 @@ class Contact extends React.Component {
             const excelBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
             saveAs(excelBlob, 'contacts.xlsx');
 
-            toast.success('Excel Sheet downloaded successfully');
+            toast.success('Excel Sheet Generated Successfully');
             this.setState({ selectedIDs: [] })
         } catch (error) {
             toast.error('Failed to download Excel Sheet');
@@ -273,11 +273,11 @@ class Contact extends React.Component {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs =='') ? true : false}> <FontAwesomeIcon icon={faDownload} /></button>
+                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload}  disabled={this.state.selectedIDs.length < 2}> <FontAwesomeIcon icon={faDownload} /></button>
 
                         </div>
                         <div className='col justify-content-end' >
-                            <button className='btn btn-danger m-1' style={{ float: "right" }} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs == '') ? true : false} onClick={() => this.handleListDelete()}>
+                            <button className='btn btn-danger m-1' style={{ float: "right" }}  disabled={this.state.selectedIDs.length < 2} onClick={() => this.handleListDelete()}>
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
                             <Link to='/contact'> <button className='btn btn-success m-1 ' style={{ float: "right" }}><FontAwesomeIcon icon={faPlus} /></button></Link>
@@ -327,7 +327,7 @@ class Contact extends React.Component {
                                         <p><b>Category: </b>{this.state.categoryNames[contact.category_id]}</p>
                                         <div className='m-1' style={{ float: "right" }}>
                                             <Link to={`/contact/edit/${contact.id}`}>
-                                                <button className='btn btn-primary m-1'>
+                                                <button className='btn btn-primary m-1' >
                                                     <i className="fas fa-pencil-alt"></i>
                                                 </button>
                                             </Link>
