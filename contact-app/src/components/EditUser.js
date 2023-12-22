@@ -10,6 +10,9 @@ import Cookies from 'js-cookie'
 import userImage from './RegisterForm/addUser.png'
 import { useParams } from 'react-router-dom';
 import BASE_URL from './config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 // Assuming you have other necessary components imported as well
 
 const EditUser = () => {
@@ -59,7 +62,15 @@ const EditUser = () => {
   // const handleYesChange = (e) => {
   //   setYes(e.target.value);
   // };
-
+  const handleRemoveImage = (e) => {
+    e.preventDefault(); // Prevents form submission
+  
+    setFormData({
+      ...formData,
+      image: '' // Reset image in formData
+    });
+    setImage(''); // Reset image state
+  };
   const ContactFormHandler = async (e) => {
     e.preventDefault();
     try {
@@ -88,6 +99,8 @@ const EditUser = () => {
 
       console.log('Update successful:', response.data);
       toast.success('Update successful');
+      let userImage = response.data.data.image;
+      Cookies.set('userImage', userImage);
       setRoute(true);
       setFormData({
         firstName: '',
@@ -304,6 +317,9 @@ const EditUser = () => {
     onClick={handleClickImage}
   />
 </div>
+<button onClick={handleRemoveImage} className="btn btn-danger mt-2">
+    <FontAwesomeIcon icon={faTrashAlt} />
+  </button>
           </center>
 
           {/* firstName field */}

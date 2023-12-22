@@ -34,7 +34,7 @@ class AddContact extends React.Component {
         userEmail: Cookies.get('email'),
         userId: Cookies.get('id'),
         toLogin: false,
-        isDarkTheme:Cookies.get('darkTheme')==='false'
+        isDarkTheme: Cookies.get('darkTheme') === 'false'
       }
     }
   }
@@ -119,25 +119,25 @@ class AddContact extends React.Component {
   ContactFormHandler = (e) => {
     e.preventDefault();
     this.setState({ setLoading: true });
-  
+
     const { formData, image, imgf, id } = this.state;
     const formData1 = new FormData();
-  
+
     formData1.append('name', formData.name);
     formData1.append('email', formData.email);
     formData1.append('phone', formData.phone);
     formData1.append('category_id', formData.category_id);
     formData1.append('user_id', id);
     formData1.append('created_by', Cookies.get('email'));
-  
+
     if (image && image !== userImage) {
       formData1.append('image', imgf);
     }
-  
+
     axios.post(`${BASE_URL}/contacts/`, formData1)
       .then(response => {
         console.log('Contact Added:', response.data);
-  
+
         this.setState({
           setLoading: false,
           formData: {
@@ -145,49 +145,49 @@ class AddContact extends React.Component {
             email: '',
             phone: '',
             category_id: '',
-            image:'',
-          },image:userImage
+            image: '',
+          }, image: userImage
         });
-  
+
         toast.success('Contact Added');
         this.delayedCall();
       })
       .catch(error => {
         console.error('Failed to add contact:', error);
-  
+
         // toast.error('Failed To Add Contact');
         this.setState({ setLoading: false });
       });
   };
 
   toggleTheme = () => {
-    if(this.state.isDarkTheme){
+    if (this.state.isDarkTheme) {
       document.body.style.backgroundColor = 'black';
       document.body.style.color = 'white';
-  
+
       // Update input field color for light theme
       const inputs = document.getElementsByTagName('input');
       for (let i = 0; i < inputs.length; i++) {
         inputs[i].style.color = 'white';
       }
     }
-    else{
+    else {
       document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
+      document.body.style.color = 'black';
 
-    // Update input field color for light theme
-    const inputs = document.getElementsByTagName('input');
-    for (let i = 0; i < inputs.length; i++) {
-      inputs[i].style.color = 'black';
-    }
+      // Update input field color for light theme
+      const inputs = document.getElementsByTagName('input');
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].style.color = 'black';
+      }
     }
   };
- handleRemoveImage = (e) => {
+  handleRemoveImage = (e) => {
     e.preventDefault(); // Prevents form submission
-  
-    this.setState({formData:{image:''},image:userImage})
+
+    this.setState({ formData: { image: '' }, image: userImage })
   };
-  
+
   render() {
     const { image, categoryData, formData } = this.state
 
@@ -217,8 +217,8 @@ class AddContact extends React.Component {
                 <img src={image} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: "50%", }} onClick={this.handleClickImage} onChange={this.changeHandler} />
               </div>
               <button onClick={this.handleRemoveImage} className="btn btn-danger mt-2">
-    <FontAwesomeIcon icon={faTrashAlt} />
-  </button>
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </button>
             </center>
             <div className="form-group row justify-content-center">
               <div className='col-md-4 '>
@@ -245,11 +245,11 @@ class AddContact extends React.Component {
               <div className='col-md-4'>
                 <label for="inputGroupSelect">Category<span className='text-danger'>*</span></label>
                 <select className="custom-select w-100 rounded p-2" id="inputGroupSelect" style={{ border: "1px solid gray", background: "none" }} value={formData.category_id} name='category_id' onChange={this.handleChange}>
-  <option value="">Choose...</option>
-  {categoryData.map((category) => (
-    <option key={category.id} value={category.id}>{category.name}</option>
-  ))}
-</select>
+                  <option value="">Choose...</option>
+                  {categoryData.map((category) => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
 

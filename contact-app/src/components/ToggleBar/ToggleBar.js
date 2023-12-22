@@ -87,7 +87,7 @@ class ToggleBar extends React.Component {
                 <Dropdown align="end">
                   <Dropdown.Toggle style={{ backgroundColor: 'transparent', border: 'none' }} id="dropdown-basic">
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border:"2px solid gray", borderRadius:"50%" }}>
-                      <img src={this.state.userImage==='null'?userImage:this.state.userImage} alt="user" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                      <img src={this.state.userImage==='null' || this.state.userImage==='' || this.state.userImage===null?userImage:this.state.userImage} alt="user" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
                     </div>
                   </Dropdown.Toggle>
 
