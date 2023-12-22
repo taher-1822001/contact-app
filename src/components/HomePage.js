@@ -39,10 +39,10 @@ class HomePage extends React.Component{
         })
     }
     handleLoginCheck(){
-      const {userEmail, userId} = this.state;
-      if(userEmail==='' && userId==='')
+      const {userEmail, userImage, userId} = this.state;
+      if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
       {
-          this.setState({toLogin:true})
+          this.setState({toHome:true})
       }
   }
     componentDidMount(){
