@@ -172,8 +172,8 @@ class Contact extends React.Component {
             toast.success('Excel Sheet Generated Successfully');
             this.setState({ selectedIDs: [] })
         } catch (error) {
-            toast.error('Failed to download Excel Sheet');
-            console.error('Error downloading Excel:', error);
+            toast.error('Error Generating Excel Sheet');
+            console.error('Error Generating Excel Sheet:', error);
         }
     };
 
