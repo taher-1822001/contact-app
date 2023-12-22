@@ -61,7 +61,7 @@ const PasswordReset = () => {
         }
     };
     const checkPasswordLength = () => {
-        if (password1.length < 7 || password2.length < 7) {
+        if (password1.length < 7 ) {
             setBtnDisabled(true);
             setPasswordLengthCheck(true);
         } else {
@@ -91,7 +91,7 @@ const PasswordReset = () => {
                                 value={password1}
                                 onChange={handleChange}
                             />
-                            {checkPasswordLength  && <small className='text-danger'>The password should be atleast 8 characters long</small>}
+                            {pswdLengthCheck  && <small className='text-danger'>The password should be atleast 8 characters long</small>}
                             <input
                                 type={type}
                                 className="form-control mt-2"
