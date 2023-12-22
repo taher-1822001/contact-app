@@ -40,7 +40,7 @@ class LoginForm extends React.Component
     }
     handleLoginCheck(){
         const {userEmail, userImage, userId} = this.state;
-        if(userEmail!==undefined && userImage!==undefined && userId!==undefined)
+        if((userEmail!==undefined || userEmail!=='') && (userImage!==undefined || userImage !=='') && (userId!==undefined || userId!==''))
         {
             this.setState({toHome:true})
         }
