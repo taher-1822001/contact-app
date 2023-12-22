@@ -1,5 +1,4 @@
 {
-  "homepage": "https://taher-1822001.github.io/contact-app",
   "name": "contact-app",
   "version": "0.1.0",
   "private": true,
@@ -31,8 +30,6 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build" ,
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

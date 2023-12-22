@@ -5,7 +5,6 @@ import RegisterForm from './RegisterForm/RegisterForm'
 import HomePage from './HomePage';
 import AddContact from './AddContact';
 import EditContact from './EditContact';
-import { useParams } from 'react-router-dom';
 import Info from './Info';
 import PasswordReset from './PasswordReset';
 import EditUser from './EditUser';

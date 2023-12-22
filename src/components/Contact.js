@@ -3,10 +3,10 @@ import userImage from './RegisterForm/userImage.png';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash, faSort, faDownload, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { faSortAlphaDown, faSortAlphaUp, faCalendar } from '@fortawesome/free-solid-svg-icons';
@@ -273,11 +273,11 @@ class Contact extends React.Component {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs == '') ? true : false}> <FontAwesomeIcon icon={faDownload} /></button>
+                            <button className='btn btn-warning m-1' onClick={this.excelSheetDownload} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs === '') ? true : false}> <FontAwesomeIcon icon={faDownload} /></button>
 
                         </div>
                         <div className='col justify-content-end' >
-                            <button className='btn btn-danger m-1' style={{ float: "right" }} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs == '') ? true : false} onClick={() => this.handleListDelete()}>
+                            <button className='btn btn-danger m-1' style={{ float: "right" }} disabled={(this.state.selectedIDs > 2) || (this.state.selectedIDs === '') ? true : false} onClick={() => this.handleListDelete()}>
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
                             <Link to='/contact'> <button className='btn btn-success m-1 ' style={{ float: "right" }}><FontAwesomeIcon icon={faPlus} /></button></Link>
